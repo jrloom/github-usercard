@@ -23,7 +23,6 @@
           Using that array, iterate over it, requesting data for each user, creating a new card for each
           user, and adding that card to the DOM.
 */
-
 const followersArray = [];
 
 /* Step 3: Create a function that accepts a single object as its only argument,
@@ -44,14 +43,6 @@ const followersArray = [];
   </div>
 </div>
 
-*/
-
-/* List of LS Instructors Github username's: 
-  tetondan
-  dustinmyers
-  justsml
-  luishrd
-  bigknell
 */
 
 const cardMaker = data => {
@@ -99,74 +90,17 @@ const cardMaker = data => {
 
 axios
   .get("https://api.github.com/users/jrloom")
+  .then(resolve => document.querySelector(".cards").appendChild(cardMaker(resolve.data)))
+  .catch(error => console.log(error));
+
+axios
+  .get(`https://api.github.com/users/jrloom/followers`)
   .then(resolve => {
-    console.log(resolve);
-    const cards = document.querySelector(".cards");
-    cards.appendChild(cardMaker(resolve.data));
+    return resolve.data.forEach(follower => {
+      axios
+        .get(`https://api.github.com/users/${follower.login}`)
+        .then(resolve => document.querySelector(".cards").appendChild(cardMaker(resolve.data)))
+        .catch(error => console.log(error));
+    });
   })
   .catch(error => console.log(error));
-//
-
-// data: {…}
-// ​​
-// avatar_url: "https://avatars0.githubusercontent.com/u/40191456?v=4"
-// ​​
-// bio: null
-// ​​
-// blog: ""
-// ​​
-// company: null
-// ​​
-// created_at: "2018-06-12T04:07:17Z"
-// ​​
-// email: null
-// ​​
-// events_url: "https://api.github.com/users/jrloom/events{/privacy}"
-// ​​
-// followers: 3
-// ​​
-// followers_url: "https://api.github.com/users/jrloom/followers"
-// ​​
-// following: 8
-// ​​
-// following_url: "https://api.github.com/users/jrloom/following{/other_user}"
-// ​​
-// gists_url: "https://api.github.com/users/jrloom/gists{/gist_id}"
-// ​​
-// gravatar_id: ""
-// ​​
-// hireable: null
-// ​​
-// html_url: "https://github.com/jrloom"
-// ​​
-// id: 40191456
-// ​​
-// location: "Wayne, MI"
-// ​​
-// login: "jrloom"
-// ​​
-// name: "Jason Loomis"
-// ​​
-// node_id: "MDQ6VXNlcjQwMTkxNDU2"
-// ​​
-// organizations_url: "https://api.github.com/users/jrloom/orgs"
-// ​​
-// public_gists: 0
-// ​​
-// public_repos: 35
-// ​​
-// received_events_url: "https://api.github.com/users/jrloom/received_events"
-// ​​
-// repos_url: "https://api.github.com/users/jrloom/repos"
-// ​​
-// site_admin: false
-// ​​
-// starred_url: "https://api.github.com/users/jrloom/starred{/owner}{/repo}"
-// ​​
-// subscriptions_url: "https://api.github.com/users/jrloom/subscriptions"
-// ​​
-// type: "User"
-// ​​
-// updated_at: "2019-07-17T07:14:41Z"
-// ​​
-// url: "https://api.github.com/users/jrloom"
